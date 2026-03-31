@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 declare global {
   // eslint-disable-next-line no-var
-  var mongoose: {
+  var mongooseConn: {
     conn: typeof mongoose | null
     promise: Promise<typeof mongoose> | null
   } | undefined
@@ -14,10 +14,10 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local')
 }
 
-let cached = global.mongoose
+let cached = global.mongooseConn
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = global.mongooseConn = { conn: null, promise: null }
 }
 
 async function dbConnect(): Promise<typeof mongoose> {

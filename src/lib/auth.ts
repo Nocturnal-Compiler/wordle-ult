@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
         await dbConnect()
         
         // Check if user exists, if not create one
-        const existingUser = await User.findOne({ email: user.email })
+        let existingUser = await User.findOne({ email: user.email })
         
         if (!existingUser) {
           await User.create({
@@ -80,12 +80,13 @@ export const authOptions: NextAuthOptions = {
       }
       return true
     },
-    async session({ session }) {
+    async session({ session, user, token }) {
       if (session.user?.email) {
         await dbConnect()
         const dbUser = await User.findOne({ email: session.user.email })
-        if (dbUser) {
-          session.user.id = dbUser._id.toString()
+        if (dbUser && session.user) {
+          // Add cast to ensure type checking
+          (session.user as any).id = dbUser._id.toString();
         }
       }
       return session
@@ -99,6 +100,3 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 }
-
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
