@@ -29,15 +29,18 @@ export default function Home() {
   
   // Show toast for game end
   useEffect(() => {
-    if (state.gameStatus === 'won') {
-      const messages = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!']
-      setToastMessage(messages[Math.min(state.guesses.length - 1, 5)])
+    if ((state.gameStatus === 'won' || state.gameStatus === 'lost') && !state.isRevealing) {
+      if (state.gameStatus === 'won') {
+        const messages = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!']
+        setToastMessage(messages[Math.min(state.guesses.length - 1, 5)])
+      } else {
+        setToastMessage(state.targetWord.toUpperCase())
+      }
       setShowToast(true)
-    } else if (state.gameStatus === 'lost') {
-      setToastMessage(state.targetWord.toUpperCase())
-      setShowToast(true)
+      const timer = setTimeout(() => setShowToast(false), 3000)
+      return () => clearTimeout(timer)
     }
-  }, [state.gameStatus, state.guesses.length, state.targetWord])
+  }, [state.gameStatus, state.isRevealing, state.guesses.length, state.targetWord])
   
   return (
     <main className="h-[100dvh] bg-abyss flex flex-col relative overflow-hidden">
