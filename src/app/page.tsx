@@ -40,13 +40,13 @@ export default function Home() {
   }, [state.gameStatus, state.guesses.length, state.targetWord])
   
   return (
-    <main className="min-h-screen bg-abyss flex flex-col relative overflow-hidden">
+    <main className="h-[100dvh] bg-abyss flex flex-col relative overflow-hidden">
       {/* Background Effects */}
       <ParticleField />
       <AsciiTornado />
       
       {/* Content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col h-full w-full max-w-lg mx-auto">
         <Header />
         
         {/* Toast Notification */}
@@ -64,12 +64,12 @@ export default function Home() {
         </AnimatePresence>
         
         {/* Game Area */}
-        <div className="flex-1 flex flex-col items-center justify-center px-4 py-4">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 min-h-0">
           <Board />
         </div>
         
         {/* Keyboard */}
-        <div className="pb-4">
+        <div className="pb-4 shrink-0">
           <Keyboard />
         </div>
       </div>

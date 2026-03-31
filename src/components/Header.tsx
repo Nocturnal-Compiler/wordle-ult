@@ -42,7 +42,7 @@ export default function Header() {
             {/* Mode Toggle */}
             <div className="flex items-center gap-2 mt-1">
               <button
-                onClick={() => switchMode('daily')}
+                onClick={(e) => { switchMode('daily'); e.currentTarget.blur(); }}
                 className={`text-xs px-2 py-0.5 rounded transition-colors ${
                   state.gameMode === 'daily'
                     ? 'bg-wordle-green text-white'
@@ -52,7 +52,7 @@ export default function Header() {
                 Daily
               </button>
               <button
-                onClick={() => switchMode('unlimited')}
+                onClick={(e) => { switchMode('unlimited'); e.currentTarget.blur(); }}
                 className={`text-xs px-2 py-0.5 rounded transition-colors ${
                   state.gameMode === 'unlimited'
                     ? 'bg-wordle-green text-white'

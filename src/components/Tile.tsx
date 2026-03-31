@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { LetterState } from '@/types'
 import { cn } from '@/lib/utils'
@@ -32,13 +33,28 @@ export default function Tile({
   const hasLetter = letter !== ''
   const revealDelay = position * 0.3
   
+  const [displayedState, setDisplayedState] = useState<LetterState>(
+    isRevealing ? 'tbd' : state
+  )
+  
+  useEffect(() => {
+    if (isRevealing && state !== 'tbd' && state !== 'empty') {
+      const timer = setTimeout(() => {
+        setDisplayedState(state)
+      }, revealDelay * 1000 + 300) // Halfway through the 0.6s flip
+      return () => clearTimeout(timer)
+    } else {
+      setDisplayedState(state)
+    }
+  }, [isRevealing, state, revealDelay])
+  
   return (
     <motion.div
       className={cn(
         'w-14 h-14 sm:w-16 sm:h-16 border-2 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase',
         'transition-colors duration-200',
-        stateColors[state],
-        hasLetter && state === 'tbd' && 'border-gray-400'
+        stateColors[displayedState],
+        hasLetter && displayedState === 'tbd' && 'border-gray-400'
       )}
       initial={false}
       animate={

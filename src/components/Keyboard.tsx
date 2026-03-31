@@ -45,10 +45,13 @@ export default function Keyboard() {
       const key = e.key.toUpperCase()
       
       if (key === 'ENTER') {
+        e.preventDefault()
         handleKeyPress('ENTER')
       } else if (key === 'BACKSPACE') {
+        e.preventDefault()
         handleKeyPress('BACKSPACE')
       } else if (/^[A-Z]$/.test(key)) {
+        e.preventDefault()
         handleKeyPress(key)
       }
     }
@@ -68,7 +71,10 @@ export default function Keyboard() {
             return (
               <motion.button
                 key={key}
-                onClick={() => handleKeyPress(key)}
+                onClick={(e) => {
+                  handleKeyPress(key)
+                  e.currentTarget.blur()
+                }}
                 className={cn(
                   'h-14 rounded-md font-bold text-white text-sm transition-all duration-200',
                   'active:scale-95 shadow-lg',
